@@ -13,6 +13,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import Head from 'next/head';
 
 export default function Home() {
   const [query, setQuery] = useState<string>('');
@@ -150,6 +151,9 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>For ksl graduates!</title>
+      </Head>
       <Layout>
         <div className="mx-auto flex justify-center flex-col gap-4">
           <h1 className="text-2xl font-bold leading-[1.1] tracking-tighter text-center">
@@ -267,7 +271,7 @@ export default function Home() {
                     placeholder={
                       loading
                         ? 'Waiting for response...'
-                        : 'What is this legal case about?'
+                        : 'What is the summary on the legal implications outlined in this document?'
                     }
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
