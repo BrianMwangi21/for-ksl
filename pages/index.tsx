@@ -41,6 +41,7 @@ export default function Home() {
 
   const messageListRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     textAreaRef.current?.focus();
@@ -117,6 +118,7 @@ export default function Home() {
               }));
             }
           }
+          scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
         },
       });
     } catch (error) {
@@ -155,8 +157,8 @@ export default function Home() {
         <title>For ksl graduates!</title>
       </Head>
       <Layout>
-        <div className="mx-auto flex justify-center flex-col gap-4">
-          <h1 className="text-2xl font-bold leading-[1.1] tracking-tighter text-center">
+        <div className="flex justify-center flex-col gap-4">
+          <h1 className="text-md md:text-2xl font-bold leading-[1.1] tracking-tighter text-center">
             Chat With Your Legal Docs
           </h1>
           <main className={styles.main}>
@@ -170,8 +172,8 @@ export default function Home() {
                       <Image
                         src="/bot-image.png"
                         alt="AI"
-                        width="40"
-                        height="40"
+                        width="20"
+                        height="20"
                         className={styles.boticon}
                         priority
                       />
@@ -182,13 +184,12 @@ export default function Home() {
                       <Image
                         src="/usericon.png"
                         alt="Me"
-                        width="30"
-                        height="30"
+                        width="20"
+                        height="20"
                         className={styles.usericon}
                         priority
                       />
                     );
-                    // The latest message sent by the user will be animated while waiting for a response
                     className =
                       loading && index === chatMessages.length - 1
                         ? styles.usermessagewaiting
@@ -254,6 +255,7 @@ export default function Home() {
                     </Accordion>
                   </div>
                 )}
+                <div ref={scrollRef}></div>
               </div>
             </div>
             <div className={styles.center}>
@@ -271,7 +273,7 @@ export default function Home() {
                     placeholder={
                       loading
                         ? 'Waiting for response...'
-                        : 'What is the summary on the legal implications outlined in this document?'
+                        : 'Type your question here...'
                     }
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
@@ -287,7 +289,6 @@ export default function Home() {
                         <LoadingDots color="#000" />
                       </div>
                     ) : (
-                      // Send icon SVG in input field
                       <svg
                         viewBox="0 0 20 20"
                         className={styles.svgicon}
@@ -303,7 +304,7 @@ export default function Home() {
           </main>
         </div>
         <footer className="m-auto">
-          <a href="https://twitter.com/mayowaoshin">Powered by Dzaddy!</a>
+          <a href="https://twitter.com/Kabiru__">Powered by Dzaddy!</a>
         </footer>
       </Layout>
     </>

@@ -4,7 +4,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex flex-col justify-center place-items-center p-12 h-fit">
+    <div className="flex flex-col justify-center place-items-center py-6 h-fit">
       <div className="container">
         <main className="flex w-full flex-1 flex-col overflow-hidden">
           {children}
