@@ -154,12 +154,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>For ksl graduates!</title>
+        <title>Atlys Chatbot!</title>
       </Head>
       <Layout>
         <div className="flex justify-center flex-col gap-4">
           <h1 className="text-md md:text-2xl font-bold leading-[1.1] tracking-tighter text-center">
-            Chat With Your Legal Docs
+            Chat With Your Atlys Docs
           </h1>
           <main className={styles.main}>
             <div className={styles.cloud}>
@@ -304,7 +304,7 @@ export default function Home() {
           </main>
         </div>
         <footer className="m-auto">
-          <a href="https://twitter.com/Kabiru__">Powered by Dzaddy!</a>
+          <a href="">Powered by ChatGPT and LangChain!</a>
         </footer>
       </Layout>
     </>
