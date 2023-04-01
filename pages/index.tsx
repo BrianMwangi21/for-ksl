@@ -28,7 +28,7 @@ export default function Home() {
   }>({
     messages: [
       {
-        message: 'Hi, what would you like to learn about this document?',
+        message: 'Hi, what would you like to learn about Atlys?',
         type: 'apiMessage',
       },
     ],
@@ -146,12 +146,12 @@ export default function Home() {
       ...messages,
       ...(pending
         ? [
-          {
-            type: 'apiMessage',
-            message: pending,
-            sourceDocs: pendingSourceDocs,
-          },
-        ]
+            {
+              type: 'apiMessage',
+              message: pending,
+              sourceDocs: pendingSourceDocs,
+            },
+          ]
         : []),
     ];
   }, [messages, pending, pendingSourceDocs]);
