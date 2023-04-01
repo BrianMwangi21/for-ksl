@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useMemo } from 'react';
+import { useRef, useState, useEffect, useMemo, useCallback } from 'react';
 import Layout from '@/components/layout';
 import styles from '@/styles/Home.module.css';
 import { Message } from '@/types/chat';
@@ -19,6 +19,7 @@ export default function Home() {
   const [query, setQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [sourceDocs, setSourceDocs] = useState<Document[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [messageState, setMessageState] = useState<{
     messages: Message[];
     pending?: string;
@@ -37,8 +38,6 @@ export default function Home() {
 
   const { messages, pending, history, pendingSourceDocs } = messageState;
 
-  console.log('messageState', messageState);
-
   const messageListRef = useRef<HTMLDivElement>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -50,6 +49,8 @@ export default function Home() {
   //handle form submission
   async function handleSubmit(e: any) {
     e.preventDefault();
+
+    setError(null);
 
     if (!query) {
       alert('Please input a question');
@@ -123,18 +124,22 @@ export default function Home() {
       });
     } catch (error) {
       setLoading(false);
+      setError('An error occurred while fetching the data. Please try again.');
       console.log('error', error);
     }
   }
 
   //prevent empty submissions
-  const handleEnter = (e: any) => {
-    if (e.key === 'Enter' && query) {
-      handleSubmit(e);
-    } else if (e.key == 'Enter') {
-      e.preventDefault();
-    }
-  };
+  const handleEnter = useCallback(
+    (e: any) => {
+      if (e.key === 'Enter' && query) {
+        handleSubmit(e);
+      } else if (e.key == 'Enter') {
+        e.preventDefault();
+      }
+    },
+    [query],
+  );
 
   const chatMessages = useMemo(() => {
     return [
@@ -150,6 +155,13 @@ export default function Home() {
         : []),
     ];
   }, [messages, pending, pendingSourceDocs]);
+
+  //scroll to bottom of chat
+  useEffect(() => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
 
   return (
     <>
@@ -206,14 +218,17 @@ export default function Home() {
                         </div>
                       </div>
                       {message.sourceDocs && (
-                        <div className="p-5">
+                        <div
+                          className="p-5"
+                          key={`sourceDocsAccordion-${index}`}
+                        >
                           <Accordion
                             type="single"
                             collapsible
                             className="flex-col"
                           >
                             {message.sourceDocs.map((doc, index) => (
-                              <div key={`sourceDoc-${index}`}>
+                              <div key={`messageSourceDocs-${index}`}>
                                 <AccordionItem value={`item-${index}`}>
                                   <AccordionTrigger>
                                     <h3>Source {index + 1}</h3>
@@ -239,7 +254,7 @@ export default function Home() {
                   <div className="p-5">
                     <Accordion type="single" collapsible className="flex-col">
                       {sourceDocs.map((doc, index) => (
-                        <div key={index}>
+                        <div key={`SourceDocs-${index}`}>
                           <AccordionItem value={`item-${index}`}>
                             <AccordionTrigger>
                               <h3>Source {index + 1}</h3>
@@ -301,6 +316,11 @@ export default function Home() {
                 </form>
               </div>
             </div>
+            {error && (
+              <div className="border border-red-400 rounded-md p-4">
+                <p className="text-red-500">{error}</p>
+              </div>
+            )}
           </main>
         </div>
         <footer className="m-auto">
